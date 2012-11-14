@@ -1,4 +1,5 @@
 CC=g++
+CFLAGS= -Wall -g
 
 all: gcat.cpp
-g++ gcat.cpp -o ../../bin/gcat
+${CC} gcat.cpp -o ../../bin/gcat ${CFLAGS}
