@@ -1,4 +1,0 @@
-CC=g++
-
-all: gcat.cpp
-g++ gcat.cpp -o ../../bin/gcat

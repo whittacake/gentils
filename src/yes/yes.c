@@ -1,17 +1,14 @@
 #include <stdio.h>
-
-
-#define VERSION "Gentils Yes v0.0.1/n"
+#include <string.h>
+#define VERSION "Gentils Yes v0.0.1\n"
 
 int main(int argc, char *argv[]){
-	char *str;
-	if(argc == 1)
-		str = "y";
-	else
-		str = argv[1];
-	
-	while(1){
-		printf("%s\n", str);
-	}
+  if(argv[1] != NULL)
+    while(1)
+      printf("%s\n", argv[1]);
+  else
+    while(1)
+      printf("yes\n");
+
 	return 0;
 }
