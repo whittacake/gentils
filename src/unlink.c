@@ -12,7 +12,7 @@ void help(const char *p) {
 int main(int argc, const char **argv) {
 	if (argc == 1) help(argv[0]);
 	if (g_unlink(argv[1])) {
-		perror("g_unlink fucked up");
+		perror("unlink");
 		exit(1);
 	}
 	return 0;
