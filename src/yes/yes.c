@@ -4,11 +4,26 @@
 
 int main(int argc, char *argv[]){
   if(argv[1] != NULL)
-    while(1)
-      printf("%s\n", argv[1]);
+    {
+      if(!strcmp(argv[1], "--version"))
+	{
+	  printf(VERSION);
+	  return 0;
+	}
+
+      while(1)
+	{
+	  printf("%s\n", argv[1]);
+	}
+    }
+
   else
-    while(1)
-      printf("yes\n");
+    {
+	while(1)
+	  {
+	    printf("yes\n");
+	  }
 
 	return 0;
+    }
 }
