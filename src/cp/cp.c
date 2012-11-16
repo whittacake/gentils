@@ -2,6 +2,8 @@
   cp - just as the "normal" cp, many features to be added
 */
 
+//Credit goes to an anonymous 4chan user.
+
 #include <stdio.h>
 #include <stdlib.h>
 
