@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// #define DEBUG
-
 void printUsage()
 {
   printf("USAGE: cp sourcefile targetfile\n");
@@ -52,10 +50,6 @@ int main ( int argc, char *argv[])
   unsigned long flen=ftell(src);
   fseek(src, 0, SEEK_SET);
 
-#ifdef DEBUG
-  printf("allocating buffer..\n");
-#endif
-
   char *buf=(char *)malloc(flen+1);
   if (!buf)
     {
@@ -65,17 +59,9 @@ int main ( int argc, char *argv[])
       return 1;
     }
 
-#ifdef DEBUG
-  printf("now reading file contents..\n");
-#endif
-
   fread(buf, flen, 1, src);
 
   // write file content
-
-#ifdef DEBUG
-  printf("now writing file contents..\n");
-#endif
 
   fwrite(buf, flen, 1, dst);
 
