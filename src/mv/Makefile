@@ -1,5 +1,4 @@
-#brutally ripped from src/echo/
-CC=cc
+CC=clang
 CFLAGS= -Wall -g
 
 all: mv.c

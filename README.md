@@ -4,3 +4,5 @@ See http://en.wikipedia.org/wiki/GNU_Core_Utilities for a list of programs to wr
 
 Just add whatever license you want. Preferably MIT or LGPL.
 Code credited to anonymous users will be under MIT.
+
+Note: try to use Clang/LLVM for MAXIMUM POINTLESSNESS

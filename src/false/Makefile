@@ -1,5 +1,5 @@
 CFLAGS= -Wall -g
-CC=gcc
+CC=clang
 
 all: false.c
 	${CC} false.c -o ../../false ${CFLAGS}

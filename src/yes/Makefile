@@ -1,5 +1,5 @@
-CC=gcc
+CC=clang
 CFLAGS= -Wall -g
 
 all: yes.c
-	gcc yes.c -o ../../bin/yes ${CFLAGS}
+	$(CC) yes.c -o ../../bin/yes $(CFLAGS)
