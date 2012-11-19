@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
 	int i = 1;
 	for(i = 1; i < argc; i++) {
 		if(!strncmp(argv[1], "--", 2) && !strcasecmp(argv[1], "--version")) {
-			 puts("Gentils false v0.1"); 
+			puts("Gentils false v0.1"); 
 		}
 	}
 	return 1;
