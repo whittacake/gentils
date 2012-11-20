@@ -12,35 +12,27 @@ Usage: echo [-n] [string ...]
 
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 int
 main (int argc, char *argv[])
 {
 
-  if (argc < 2)
-    {
-      return 0;
-    }
+	if (argc < 2)
+		return 0;
 
-  bool newline = true;
+	int i;
+	char c;
 
-  if (!strcmp(argv[1], "-n"))
-    {
-      newline = false;
-    }
+	c = getopt(argc, argv, "n");
 
-  for (int i = newline ? 1 : 2; i < argc; i++)
-    {
-      {
-	printf("%s ", argv[i]);
-      }
-    }
+	if (c != 'n') {
+		for (i = 1; i < argc; i++) 
+			printf("%s ", argv[i]);
+		printf("\n");
+	} else {
+		for (i = 2; i < argc; i++) 
+			printf("%s ", argv[i]);
+	}
 
-  if (newline)
-    {
-      printf("\n");
-    }
-
-  return 0;
+	return 0;
 }
