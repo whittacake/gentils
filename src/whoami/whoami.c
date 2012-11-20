@@ -116,7 +116,13 @@ RESULT process_passwd(void)
             /*read and check the uid*/
             tempid = -1;
             fscanf(passwd, "%d", &tempid);
-            /*if success, report the "user name" to stdout*/
+            if (tempid == -1)
+            {
+                RETURN_STATUS = ERROR_FILE;
+                break;
+            }
+
+            /*if the id's match, report the "user name" to stdout*/
             if (tempid == euid)
             {
                 printf("%s\n", name);
