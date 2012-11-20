@@ -1,18 +1,38 @@
-/* this header is temporary and stuff
+/*
+ * this header is temporary and stuff
  * I guess it's released under the MIT liscence
  * or something
- * Nov 19 16:20:13 EST 2012
- * 420 smoak moar
+ * Tue Nov 20 15:46:44 EST 2012
+*/
+
+/*
+ * some notes:
+ *  . Fuck getopt
+ *  . I know there is an API for parsing /etc/passwd in GNU libc
+ *  . I looked at coreutils whoami.c
+ *      It uses getpwuid,
+ *      a function that would make this program smaller
+ *      but perhaps this silly project wants to be independent
+ *      from the C library as much as possible.
+ *  . Fuck Steve Harvey
  */
 
 #include "../shared.h"
 
-/* the following should be in shared.h
- * or created by a Makefile
+/* 
+ * The following should be in shared.h,
+ * or created by a Makefile.
  */
 
-#define VERSION "1.0"
-#define LICENSE "MIT"
+#ifndef VERSION
+#define VERSION      "unknown"
+#endif
+
+#ifndef COMPILE_DATE
+#define COMPILE_DATE "unknown"
+#endif
+
+#define LICENSE      "MIT"
 
 /*typedef for return types*/
 typedef enum {
@@ -37,7 +57,7 @@ RESULT process_passwd(void)
     uid_t euid = geteuid();
     FILE *passwd = fopen("/etc/passwd", "r");
 
-    /*perhaps we're in an incomplete chroot or something*/
+    /*perhaps an incomplete chroot or something*/
     if (!passwd)
         return ERROR_FILE;
 
@@ -46,8 +66,7 @@ RESULT process_passwd(void)
 
     /*temporary storage for user names and ids*/
     char *name = NULL;
-    int   tempid;
-    char id_found = 0;
+    int tempid;
 
     RESULT RETURN_STATUS = NO_ERROR;
     while (1)
@@ -95,23 +114,25 @@ RESULT process_passwd(void)
             }
 
             /*read and check the uid*/
+            tempid = -1;
             fscanf(passwd, "%d", &tempid);
-            if (tempid == euid) id_found = 1;
+            /*if success, report the "user name" to stdout*/
+            if (tempid == euid)
+            {
+                printf("%s\n", name);
+                RETURN_STATUS = NO_ERROR;
+                break;
+            }
         } 
-        else {
-            /*possible formatting error in passwd file*/
+
+        /*If there is no name before uid (len == 0)*/
+        /*possible formatting error in passwd file*/
+        else
+        {
             RETURN_STATUS = ERROR_FILE;
             break;
         }
-        
-        /*if success, report the "user name" to stdout*/
-        if (id_found)
-        {
-            printf("%s\n", name);
-            RETURN_STATUS = NO_ERROR;
-            break;
-        } 
-        
+               
         /*skip to next line, check for EOF*/
         if (skip_over_char('\n', passwd))
         {
@@ -136,7 +157,8 @@ void print_usage(char const * const progname)
 
 void print_version()
 {
-    printf("whoami (gentils) "VERSION"\n");
+    printf("whoami version: "VERSION" (gentils git)\n");
+    printf("Build date: "COMPILE_TIME"\n");
     printf("License "LICENSE"\n");
 }
 
@@ -173,6 +195,7 @@ int main(int argc, char *argv[])
         }
 
         print_usage(argv[0]);
+        return EXIT_FAILURE;
     }
 
     switch (process_passwd())
