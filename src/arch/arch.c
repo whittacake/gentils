@@ -11,4 +11,16 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public 
 License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include 
+#include <stdio.h>
+#include <sys/utsname.h>
+
+int main(int argc, char *argv[]) {
+	struct utsname name;
+
+	if(!uname(&name)) {
+		printf("%s\n", name.machine);
+		return 0;
+	}
+
+	return -1;
+}
