@@ -38,7 +38,7 @@ void ignore_env(char const * const *str, int argn) {
     clearenv();
 }
 
-/*Print the environment to stdout, take note of globals set*/
+/*Print the environment to stdout, take of g_paramNull for formatting*/
 void print_env(void)
 {
     char **envp = environ;
