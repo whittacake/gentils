@@ -1,7 +1,7 @@
 VERSION=1.0
 DATE=$(shell date)
 
-CC=gcc
+CC=clang
 CFLAGS= -Wall -g\
 		-DCOMPILE_TIME="\"$(DATE)\""\
 		-DVERSION="\"$(VERSION)\""
