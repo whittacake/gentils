@@ -5,4 +5,4 @@ all: logname.c
 	$(CC) $(CFLAGS) logname.c -o ../../usr/bin/logname
 
 clean:
-	rm -i ../../usr/logname
+	rm -i ../../usr/bin/logname
