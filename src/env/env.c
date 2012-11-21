@@ -27,9 +27,6 @@
 /*refers to envp*/
 extern char **environ;
 
-/*when given -i, --ignore-environment, start with empty env*/
-char  g_paramIgnore = 0;
-
 /*when given -0, --null, replace new-lines with '0'*/
 char  g_paramNull = 0;
 
