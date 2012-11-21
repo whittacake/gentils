@@ -2,7 +2,8 @@
 #include <string.h>
 #include <dirent.h>
 
-struct arg_list {
+struct arg_list 
+{
 	int show_hidden;
 	char** dir_list;
 };
