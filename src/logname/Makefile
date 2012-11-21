@@ -2,7 +2,7 @@ CC=clang
 CFLAGS= -Wall --pedantic -g
 
 all: logname.c
-	$(CC) $(CFLAGS) logname.c -o ../../bin/logname
+	$(CC) $(CFLAGS) logname.c -o ../../usr/bin/logname
 
 clean:
-	rm ../../logname -i
+	rm -i ../../usr/logname
