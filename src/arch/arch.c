@@ -14,10 +14,12 @@ License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <sys/utsname.h>
 
-int main(int argc, char *argv[]) {
+int
+main(int argc, char *argv[])
+{
 	struct utsname name;
 
-	if(!uname(&name)) {
+	if(uname(&name) == 0) {
 		printf("%s\n", name.machine);
 		return 0;
 	}

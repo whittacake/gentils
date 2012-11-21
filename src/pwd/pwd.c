@@ -15,17 +15,18 @@ License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unistd.h>
 #include <stdlib.h>
 
-int main(int argc, char *argv[])
+int 
+main(int argc, char *argv[])
 {
 	char *currentPath;
+	char c;
 
-	int c = getopt(argc, argv, "L");
+	c = getopt(argc, argv, "L");
 
-	if (c == 'L') {
+	if (c == 'L')
 		currentPath = getenv("PWD");
-	} else {	
+	else	
 		currentPath = getcwd(NULL, 0);
-	}
 
 	printf("%s\n", currentPath);
 
