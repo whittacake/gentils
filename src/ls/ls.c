@@ -57,7 +57,11 @@ void itr_ent(char* dir_name, struct arg_list args) {
 	while(1) {
 		char* dir = args.dir_list[i];
 		if(dir == NULL) {
-			break;
+			if(i == 0) {
+				dir = "./";
+			} else {
+				break;
+			}
 		}
 		int d;
 		if(args.show_hidden == 1) {
