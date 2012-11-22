@@ -5,13 +5,6 @@
 
 #include "ls.h"
 
-struct arg_list 
-{
-	int show_hidden;
-	char** dir_list;
-};
-
-
 int main(int argc, char** argv) {
 
 	char** dl = malloc(argc * sizeof(char**));
