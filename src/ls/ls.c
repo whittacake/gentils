@@ -1,22 +1,19 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 
-struct arg_list {
-	int show_hidden;
-	char** dir_list;
-};
+#include "ls.h"
 
-int one(const struct dirent *ent);
-void itr_ent(char* dir_name, struct arg_list args);
-int no_dot(const struct dirent *ent);
 
 int main(int argc, char** argv) {
 
-	struct arg_list args = {0,0};
+	char** dl = malloc(argc * sizeof(char**));
+	struct arg_list args = {0, 0};
 
 	int i;
-	for(i = 0; i < argc; i++) {
+	int j = 0; 
+	for(i = 1; i < argc; i++) {
 		//Check for flag
 		if(argv[i][0] == '-') {
 			int n;
@@ -29,7 +26,17 @@ int main(int argc, char** argv) {
 				}
 			} 
 		} else { //not a flag, therefore its a dir to list
-		
+			dl[j] = argv[i];
+			j++;
+		}
+	}
+	dl[j] = NULL;
+	args.dir_list = dl;
+
+	for(i = 0; i < (argc - 1); i++) {
+		char* str = args.dir_list[i];
+		if(str != NULL) {
+			printf("%s\n", str);
 		}
 	}
 
