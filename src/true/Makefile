@@ -2,6 +2,6 @@ CFLAGS= -Wall -g
 CC=clang
 
 all: true.c
-	${CC} true.c -o ../../true ${CFLAGS}
+	${CC} true.c -o ../../bin/true ${CFLAGS}
 clean:
-	rm ../../true -i
+	rm ../../bin/true -i
