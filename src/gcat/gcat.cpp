@@ -27,7 +27,7 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	vector<string> files;
 
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
 	long long curline = 0;
 
-	for(int i = 0; i < files.size(); i++)
+	for(unsigned int i = 0; i < files.size(); i++)
 	{
 		ifstream inFile;
 		inFile.open(files[i].c_str(), ios::in);
