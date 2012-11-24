@@ -1,5 +1,5 @@
 CC=clang
 CFLAGS= -Wall -g
 
-all: echo.c
-	$(CC) $(CFLAGS) echo.c -o ../../bin/echo
+all: expand.c
+	$(CC) $(CFLAGS) expand.c -o ../../bin/expand
