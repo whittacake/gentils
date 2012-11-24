@@ -1,9 +1,0 @@
-Exception: STATUS_ACCESS_VIOLATION at eip=00401215
-eax=00402081 ebx=00000000 ecx=00000000 edx=2535F988 esi=61275A68 edi=611A1E9F
-ebp=0028AC58 esp=0028AC30 program=C:\Users\hector\Desktop\gentils\src\echo\a.exe, pid 7476, thread main
-cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
-Stack trace:
-Frame     Function  Args
-0028AC58  00401215  (00000005, 0028AC80, 80010100, 611A1EB6)
-0028ACF8  6100763A  (00000000, 0028CD78, 61006C50, 00000000)
-End of stack trace
