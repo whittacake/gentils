@@ -16,11 +16,16 @@ main (int argc, char *argv[])
 			c = fgetc (gFile);
 			do{
     			if(c == '\t'){ 
-    				for(j = 8 - space - 1; j >= 0; j--)
+    				for(j = 8 - space; j > 0; j--)
     					printf(" ");
+    				space = 0;
+    			}
+    			else if(c == '\n'){
+    				space = 0;
+    				printf("\n");
     			}
     			else{
-    				if(space == 8)
+    				if(space == 7)
     					space = 0;
     				else
     					space++;
