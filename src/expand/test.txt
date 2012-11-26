@@ -1,0 +1,5 @@
+foo	bar
+This	is			a number	of	tabs	.
+It varies		per line	to test 		out
+my version 	of 	expand.		I wonder if it 	will	work!
+This	test	is	much	harder	than	another	I 	tried.
