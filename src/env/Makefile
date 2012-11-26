@@ -7,4 +7,7 @@ CFLAGS= -Wall -g\
 		-DVERSION="\"$(VERSION)\""
 
 all: env.c
-	$(CC) $(CFLAGS) env.c -o ../../bin/env
+	$(CC) $(CFLAGS) env.c -o ../../usr/bin/env
+
+clean:
+	rm -i ../../usr/bin/env

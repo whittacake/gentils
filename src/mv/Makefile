@@ -3,3 +3,5 @@ CFLAGS= -Wall -g
 
 all: mv.c
 	$(CC) $(CFLAGS) mv.c -o ../../bin/mv
+clean:
+	rm -i ../../bin/mv

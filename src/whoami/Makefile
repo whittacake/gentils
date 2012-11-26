@@ -10,4 +10,6 @@ CFLAGS= -Wall\
 
 
 all: whoami.c
-	$(CC) $(CFLAGS) whoami.c -o ../../bin/whoami
+	$(CC) $(CFLAGS) whoami.c -o ../../usr/bin/whoami
+clean:
+	rm -i ../../usr/bin/whoami
