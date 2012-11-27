@@ -7,4 +7,6 @@ CFLAGS= -Wall -g\
 		-DVERSION="\"$(VERSION)\""
 
 all: tee.c
-	$(CC) $(CFLAGS) tee.c -o ../../bin/tee
+	$(CC) $(CFLAGS) tee.c -o ../../usr/bin/tee
+clean:
+	rm -i ../../usr/bin/tee
