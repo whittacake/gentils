@@ -55,7 +55,19 @@ print_version(void)
 }
 
 int
-byte_count(FILE *src)
+sum(int *nums, int size) {
+        int total = 0;
+        for (int i = 0; i < size; ++i) total += nums[i];
+        return total;
+}
+
+int
+maximum(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int
+byte_count_file(FILE *src)
 {
         char ch;
         int chars = 0;
@@ -67,7 +79,15 @@ byte_count(FILE *src)
 }
 
 int
-word_count(FILE *src)
+byte_count_str(char *str)
+{
+    int p = 0;
+    while (str[p] != '\0') p++;
+    return p;
+}
+
+int
+word_count_file(FILE *src)
 {
         char ch;
         int sp = 1;
@@ -86,7 +106,25 @@ word_count(FILE *src)
 }
 
 int
-line_count(FILE *src)
+word_count_str(char *str)
+{
+    int sp = 1;
+    int words = 0;
+    
+    int i;
+    for (i = 0; str[i] != '\0'; ++i) {
+        if (isspace(str[i])) sp = 1;
+        else if (sp) {
+            ++words;
+            sp = 0;
+        }
+    }
+    
+    return words;
+}
+
+int
+line_count_file(FILE *src)
 {
         char ch;
         int lines = 0;
@@ -100,7 +138,20 @@ line_count(FILE *src)
 }
 
 int
-max_line_length(FILE *src)
+line_count_str(char *str)
+{
+    int lines = 0;
+    
+    int i;
+    for (i = 0; str[i] != '\0'; ++i) {
+        if (str[i] == '\n') ++lines;
+    }
+    
+    return lines; 
+}
+
+int
+max_line_length_file(FILE *src)
 {
         char ch;
         int max = 0;
@@ -116,6 +167,23 @@ max_line_length(FILE *src)
 
         rewind(src);
         return max;
+}
+
+int
+max_line_length_str(char *str)
+{
+    int max = 0;
+    int len = 0;
+
+    int i;
+    for (i = 0; str[i] != '\0'; ++i) {
+        if (str[i] != '\n') ++len;
+        else {
+            if (len > max) max = len;
+            len = 0;
+        }
+    }
+    return max;
 }
 
 char*
@@ -154,67 +222,57 @@ read_stdin()
     return result;
 }
 
-int
-sum(int *nums, int size) {
-        int i;
-        int total = 0;
-        for (i = 0; i < size; ++i) total += nums[i];
-        return total;
-}
 
 int
-maximum(int a, int b) {
-    return (a > b) ? a : b;
+argcmp(char *arg, char *sht, char *lng)
+{
+    return (strcmp(arg,sht) == 0 || strcmp(arg,lng) == 0);
 }
 
-/* wc counts the number of bytes, words, and/or lines in a file(s). */
+/* wc counts the number of bytes, words, and/or lines in a file or group of files. */
 int
 main(int argc, char *argv[])
 {
-        int byte_flag = 0;
-        int word_flag = 0;
-        int line_flag = 0;
+        int byte_flag   = 0;
+        int word_flag   = 0;
+        int line_flag   = 0;
         int length_flag = 0;
-        int file_count = 0;
+        int file_index  = 0;
 
-        for (int i = 1; i < argc && !file_count; ++i) {
-            if (strcmp(argv[i],"-c") == 0 || strcmp(argv[i],"--chars") == 0) {
-                byte_flag = 1;
-            } else if (strcmp(argv[i],"-w") == 0 || strcmp(argv[i],"--words") == 0) {
-                word_flag = 1;
-            } else if (strcmp(argv[i],"-l") == 0 || strcmp(argv[i],"--lines") == 0) {
-                line_flag = 1;
-            } else if (strcmp(argv[i],"-L") == 0 || strcmp(argv[i],"--max-line-length") == 0) {
-                length_flag = 1;
-            } else if (strcmp(argv[i],"-h") == 0 || strcmp(argv[i],"--help") == 0) {
+        /* process flags */
+        for (int i = 1; i < argc && !file_index; ++i) {
+            if      (argcmp(argv[i],"-c","--chars")) byte_flag = 1;
+            else if (argcmp(argv[i],"-w","--words")) word_flag = 1;
+            else if (argcmp(argv[i],"-l","--lines")) line_flag = 1;
+            else if (argcmp(argv[i],"-L","--max-line-length")) length_flag = 1;
+            else if (argcmp(argv[i],"-h","--help")) {
                 print_help();
                 exit(EXIT_SUCCESS);
-            } else if (strcmp(argv[i],"-v") == 0 || strcmp(argv[i],"--version") == 0) {
+            } else if (argcmp(argv[i],"-v","--version")) {
                 print_version();
                 exit(EXIT_SUCCESS);
-            } else file_count = argc - i;
+            } else file_index = i;
         }
+        
+        int file_count = argc - file_index;
 
         if (!byte_flag && !word_flag && !line_flag && !length_flag) {
             byte_flag = word_flag = line_flag = 1;
         }
 
-        /* handle piped input */
-        if(!isatty(fileno(stdin)) && file_count == 0) {
-                char *piped_input = read_stdin();
-                printf("%s", piped_input);
-                return 0;
+        /* TODO: handle piped input */
+        int piped = 0;
+        char *piped_input;
+        if(!isatty(fileno(stdin))) {
+                piped_input = read_stdin();
+                piped = 1;
+                file_count = 1;
         }
 
         /* user error: no piped input and no files given */
-        if (argc == 1) {
+        if (argc == 1 && !piped) {
                 print_usage();
                 exit(EXIT_SUCCESS);
-        }
-
-        if (!file_count) {
-                print_usage();
-                return 1;
         }
 
         FILE *src;
@@ -223,29 +281,40 @@ main(int argc, char *argv[])
         int lines[file_count];
         int lengths[file_count];
 
-        int failed = 0;
-        for (int i = optind; i < argc; ++i) {
+        if (!piped) { // process files
 
-                if (!(src=fopen(argv[i], "r"))) {
-                        printf("wc: %s: file cound not be opened (or does not exist)\n", argv[i]);
-                        failed = 1;
-                        continue;
+            int file_failure = 0;
+            for (int i = 0; i < file_count; ++i) {
+                
+                if (!(src=fopen(argv[i+file_index], "r"))) {
+                    printf(
+                        "wc: %s: file cound not be opened"
+                        "(or does not exist)\n", argv[i+file_index]);
+                    file_failure = 1;
+                    continue;
                 }
-
-                if (byte_flag) bytes[i-optind] = byte_count(src);
-                if (word_flag) words[i-optind] = word_count(src);
-                if (line_flag) lines[i-optind] = line_count(src);
-                if (length_flag) lengths[i-optind] = max_line_length(src);
-
+               
+                if (byte_flag) bytes[i] = byte_count_file(src);
+                if (word_flag) words[i] = word_count_file(src);
+                if (line_flag) lines[i] = line_count_file(src);
+                if (length_flag) lengths[i] = max_line_length_file(src);
+            
                 fclose(src);
+            }
+            if (file_failure) exit(EXIT_FAILURE);
+            
+        } else { // process STDIN
+            if (byte_flag) bytes[0] = byte_count_str(piped_input);
+            if (word_flag) words[0] = word_count_str(piped_input);
+            if (line_flag) lines[0] = line_count_str(piped_input);
+            if (length_flag) lengths[0] = max_line_length_str(piped_input);
         }
-
-        if (failed) exit(EXIT_FAILURE);
 
         int bytes_total;
         int words_total;
         int lines_total;
         int length_total;
+        
         int bytes_digits;
         int words_digits;
         int lines_digits;
@@ -273,20 +342,23 @@ main(int argc, char *argv[])
                 }
         }
 
+        /* print requested counts */
         for (int i=0;i<file_count;++i) {
                 if (line_flag) printf("%*d ", lines_digits, lines[i]);
                 if (word_flag) printf("%*d ", words_digits, words[i]);
                 if (byte_flag) printf("%*d ", bytes_digits, bytes[i]);
                 if (length_flag) printf("%*d ", length_digits, lengths[i]);
-                printf("%s\n", argv[optind + i]);
+                if (!piped) printf(" %s\n", argv[i+file_index]);
+                    else printf("\n");
         }
 
+        /* print 'total' line if multiple files were passed to wc */
         if (file_count > 1) {
                 if (line_flag) printf("%*d ", lines_digits, lines_total);
                 if (word_flag) printf("%*d ", words_digits, words_total);
                 if (byte_flag) printf("%*d ", bytes_digits, bytes_total);
                 if (length_flag) printf("%*d ", length_digits, length_total);
-                printf("total\n");
+                printf(" total\n");
         }
 
         return 0;
