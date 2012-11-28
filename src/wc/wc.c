@@ -48,7 +48,7 @@ void
 print_version(void)
 {
         printf(
-                "wc (alpha 0.01) is part of gentils "
+                "wc 0.1 is part of gentils "
                 "(https://github.com/Oxidopamine/gentils)\n"
                 "Written by Anonymous\n"
                 );
