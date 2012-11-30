@@ -1,10 +1,8 @@
 module Main(main) where
 import System.Environment (getArgs)
 import System.Console.GetOpt
-import System.Posix.Files (removeLink,
-                           createLink,
-                           createSymbolicLink)
-import Control.Monad (when)
+import System.Posix.Files
+import Control.Monad (when, void)
 
 data Options = Options { force      :: Bool,
                          symbolic   :: Bool,
@@ -31,14 +29,32 @@ options =
 nonoptions :: Options -> [String] -> Options
 nonoptions opts (x:[]) = opts { source = [x], target = x }
 nonoptions opts (x:y:[]) = opts { source = [x], target = y }
-nonoptions _ _ = usage
+nonoptions opts xs = let (x:xs') = reverse xs in
+                     opts { source = xs', target = x }
 
-usage = error "usage: ln [-fs] source target"
+usage = error $ "usage: ln [-fs] source target\n" ++
+                "\tln [-fs] source ... [directory]"
 
-start opts = do when (force opts) $ removeLink $ target opts
-                (if symbolic opts
-                    then createSymbolicLink
-                    else createLink) (head $ source opts) (target opts)
+link :: Options -> FilePath -> FilePath -> IO ()
+link opts src tgt = when (force opts) $ removeLink tgt >>
+                    (if symbolic opts
+                        then createSymbolicLink
+                        else createLink) src tgt
+
+multiLink :: Options -> IO ()
+multiLink opts = do
+            void $ mapM (go) (source opts)
+            where go x = link opts x $ dir ++ "/" ++ x
+                  dir = target opts
+
+singleLink :: Options -> IO ()
+singleLink opts = do link opts (head $ source opts) (target opts)
+
+start :: Options -> IO ()
+start opts = do st <- getFileStatus (target opts)
+                if (isDirectory st)
+                    then multiLink opts
+                    else singleLink opts
 
 main :: IO ()
 main = do
